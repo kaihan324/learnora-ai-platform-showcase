@@ -1,0 +1,24 @@
+name: Publish v4.1.0 Showcase Release
+
+on:
+  create:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.event.ref_type == 'branch' && github.event.ref == 'release-v4.1.0'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view v4.1.0 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
+          gh release create v4.1.0 \
+            --repo "$GITHUB_REPOSITORY" \
+            --target main \
+            --title "Learnora v4.1.0 — Public Showcase" \
+            --notes-file RELEASE-v4.1.0.md
